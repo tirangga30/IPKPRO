@@ -45,3 +45,4 @@ class AcademicProfile extends Model
         return $this->hasMany(Semester::class)->orderBy('sort_order')->orderBy('id');
     }
 }
+

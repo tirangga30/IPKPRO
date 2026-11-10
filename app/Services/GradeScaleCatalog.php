@@ -146,3 +146,4 @@ class GradeScaleCatalog
         return $sorted[count($sorted) - 1] ?? null;
     }
 }
+

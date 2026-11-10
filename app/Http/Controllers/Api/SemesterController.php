@@ -255,3 +255,4 @@ class SemesterController extends Controller
         ];
     }
 }
+

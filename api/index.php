@@ -40,3 +40,4 @@ foreach ($cacheOverrides as $key => $value) {
 }
 
 require __DIR__ . '/../public/index.php';
+

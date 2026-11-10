@@ -34,3 +34,4 @@ class Semester extends Model
         return $this->hasMany(Course::class)->orderBy('sort_order')->orderBy('id');
     }
 }
+

@@ -96,22 +96,17 @@ return [
                     return $url;
                 }
                 $host = $parts['host'] ?? '';
-                if (str_ends_with($host, '.neon.tech')) {
-                    parse_str($parts['query'] ?? '', $query);
-                    if (!isset($query['sslmode'])) {
-                        $query['sslmode'] = env('DB_SSLMODE', 'require');
-                    }
-                    if (!isset($query['options']) && str_contains($host, '.')) {
-                        $endpoint = explode('.', $host)[0];
-                        $endpoint = preg_replace('/-pooler$/', '', $endpoint);
-                        if ($endpoint !== '') {
-                            $query['options'] = 'endpoint=' . $endpoint;
-                        }
-                    }
-                    $prefix = strtok($url, '?');
-                    return $prefix . '?' . http_build_query($query);
+                parse_str($parts['query'] ?? '', $query);
+                // Laravel expects $config['options'] to be an array of PDO attributes,
+                // so a URL query param named "options" triggers a TypeError in Connector::getOptions().
+                if (isset($query['options'])) {
+                    unset($query['options']);
                 }
-                return $url;
+                if (str_ends_with($host, '.neon.tech') && !isset($query['sslmode'])) {
+                    $query['sslmode'] = env('DB_SSLMODE', 'require');
+                }
+                $prefix = strtok($url, '?');
+                return empty($query) ? $prefix : ($prefix . '?' . http_build_query($query));
             })(),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '5432'),

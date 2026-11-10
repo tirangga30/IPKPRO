@@ -55,3 +55,4 @@ class GpaCalculatorServiceTest extends TestCase
         $this->assertEqualsWithDelta(24 / 7, $best['semesters'][1]['ips'], 0.0001);
     }
 }
+
