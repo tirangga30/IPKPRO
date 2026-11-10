@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>IPKPRO — Kalkulator IPK &amp; Perencana Akademik</title>
-  <meta name="description" content="Kalkulator IPK & IPS kuliah berbasis Laravel + Neon PostgreSQL: kelola semester, mata kuliah, konversi nilai angka/huruf, simulasi target IPK, dan cetak transkrip.">
+  <meta name="description" content="Kalkulator IPK & IPS kuliah modern: kelola semester, mata kuliah, konversi nilai angka/huruf, simulasi target IPK, dan cetak transkrip.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230d9488'/%3E%3Cstop offset='1' stop-color='%232563eb'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M26 14v5M6 14l10-5 10 5-10 5zM10 16v4.5c3 2.5 9 2.5 12 0V16' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,11 +27,6 @@
           <div>
             <div class="brand-title-row">
               <h1 class="brand-title">IPKPRO</h1>
-              <span class="brand-badge">Laravel</span>
-              <span class="sync-pill" id="syncStatusPill" title="Status sinkronisasi database">
-                <i class="sync-dot"></i>
-                <span id="syncStatusText">Tersimpan di DB</span>
-              </span>
             </div>
             <p class="brand-subtitle" id="headerStudentSummary">Kalkulator IPK, IPS &amp; Perencana Studi</p>
           </div>
@@ -89,7 +84,7 @@
         <div class="info-banner">
           <div class="info-banner-text">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <span>Database belum terhubung atau belum dimigrasi. Aplikasi berjalan dalam mode sementara hingga Neon DB dikonfigurasi.</span>
+            <span>Mode penyimpanan sementara aktif. Beberapa perubahan belum tersimpan permanen.</span>
           </div>
         </div>
       @endif
@@ -389,7 +384,7 @@
         <div class="modal-header">
           <div>
             <h3 id="modalDataTitle">Backup, Ekspor &amp; Impor Data</h3>
-            <p class="modal-subtitle">Data tersimpan otomatis di database. Ekspor untuk cadangan atau dibuka di Excel.</p>
+            <p class="modal-subtitle">Data tersimpan otomatis di akunmu. Ekspor untuk cadangan atau dibuka di Excel.</p>
           </div>
           <button type="button" class="btn btn-icon btn-ghost modal-close" data-close-modal="modalData" aria-label="Tutup">✕</button>
         </div>

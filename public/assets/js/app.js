@@ -15,7 +15,6 @@
   var draftScale = null;
 
   // Sync queue & debounced timers
-  var activeSyncCount = 0;
   var settingsTimer = null;
   var pendingSettingsPatch = {};
   var semesterTimers = {};
@@ -82,40 +81,15 @@
     return JSON.parse(JSON.stringify(obj));
   }
 
-  function setSyncStatus(mode, text) {
-    if (!dom.syncStatusPill || !dom.syncStatusText) return;
-    dom.syncStatusPill.classList.remove('is-saving', 'is-error', 'is-offline');
-    if (mode === 'saving') {
-      dom.syncStatusPill.classList.add('is-saving');
-    } else if (mode === 'error') {
-      dom.syncStatusPill.classList.add('is-error');
-    } else if (mode === 'offline') {
-      dom.syncStatusPill.classList.add('is-offline');
-    }
-    dom.syncStatusText.textContent = text;
-  }
-
   function trackSync(promise) {
     if (!isDbMode()) {
       saveOfflineFallback();
       return Promise.resolve(null);
     }
-    activeSyncCount++;
-    setSyncStatus('saving', 'Menyimpan...');
-    return promise
-      .then(function (res) {
-        activeSyncCount = Math.max(0, activeSyncCount - 1);
-        if (activeSyncCount === 0) {
-          setSyncStatus('ready', 'Tersimpan di DB');
-        }
-        return res;
-      })
-      .catch(function (err) {
-        activeSyncCount = Math.max(0, activeSyncCount - 1);
-        setSyncStatus('error', 'Gagal Sinkron');
-        showToast(err.message || 'Gagal menyimpan ke database.', { type: 'error' });
-        throw err;
-      });
+    return promise.catch(function (err) {
+      showToast(err.message || 'Gagal menyimpan perubahan.', { type: 'error' });
+      throw err;
+    });
   }
 
   function scheduleSettingsSave(patch) {
@@ -124,7 +98,6 @@
       return;
     }
     Object.assign(pendingSettingsPatch, patch);
-    setSyncStatus('saving', 'Menyimpan...');
     clearTimeout(settingsTimer);
     settingsTimer = setTimeout(flushSettingsSave, 380);
   }
@@ -147,7 +120,6 @@
     }
     var key = String(semId);
     pendingSemesterPatches[key] = Object.assign(pendingSemesterPatches[key] || {}, patch);
-    setSyncStatus('saving', 'Menyimpan...');
     clearTimeout(semesterTimers[key]);
     semesterTimers[key] = setTimeout(function () {
       flushSemesterSave(key, false);
@@ -173,7 +145,6 @@
     }
     var key = String(courseId);
     pendingCoursePatches[key] = Object.assign(pendingCoursePatches[key] || {}, patch);
-    setSyncStatus('saving', 'Menyimpan...');
     clearTimeout(courseTimers[key]);
     courseTimers[key] = setTimeout(function () {
       flushCourseSave(key, false);
@@ -195,8 +166,6 @@
   function cacheDom() {
     dom.headerStudentSummary = document.getElementById('headerStudentSummary');
     dom.activeScaleLabel = document.getElementById('activeScaleLabel');
-    dom.syncStatusPill = document.getElementById('syncStatusPill');
-    dom.syncStatusText = document.getElementById('syncStatusText');
     dom.onboardingBanner = document.getElementById('onboardingBanner');
     dom.duplicateNoticeBanner = document.getElementById('duplicateNoticeBanner');
     dom.duplicateNoticeText = document.getElementById('duplicateNoticeText');
@@ -1181,7 +1150,7 @@
       if (isDbMode()) {
         trackSync(Api.loadDemo()).then(function (data) {
           applyServerState(data);
-          showToast('Contoh transkrip 4 semester dimuat ke database.', { type: 'success' });
+          showToast('Contoh transkrip 4 semester berhasil dimuat.', { type: 'success' });
         });
       }
     });
@@ -1711,7 +1680,7 @@
             trackSync(Api.importData(importedPayload)).then(function (res) {
               applyServerState(res);
               closeModal(dom.modalData);
-              showToast('Data transkrip berhasil diimpor ke database.', { type: 'success' });
+              showToast('Data transkrip berhasil diimpor.', { type: 'success' });
             });
           }
         } catch (err) {
@@ -1751,11 +1720,6 @@
   function init() {
     cacheDom();
     applyTheme(state.theme);
-    if (isDbMode()) {
-      setSyncStatus('ready', 'Tersimpan di DB');
-    } else {
-      setSyncStatus('offline', 'Mode Offline');
-    }
     bindEvents();
     renderAll();
   }
