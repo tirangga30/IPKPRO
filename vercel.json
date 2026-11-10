@@ -1,6 +1,8 @@
 {
   "version": 2,
   "framework": null,
+  "buildCommand": "echo 'Static assets ready'",
+  "outputDirectory": "public",
   "functions": {
     "api/index.php": {
       "runtime": "vercel-php@0.9.0"
@@ -9,19 +11,19 @@
   "routes": [
     {
       "src": "/assets/(.*)",
-      "dest": "/public/assets/$1"
+      "dest": "/assets/$1"
     },
     {
       "src": "/build/(.*)",
-      "dest": "/public/build/$1"
+      "dest": "/build/$1"
     },
     {
       "src": "/favicon.ico",
-      "dest": "/public/favicon.ico"
+      "dest": "/favicon.ico"
     },
     {
       "src": "/robots.txt",
-      "dest": "/public/robots.txt"
+      "dest": "/robots.txt"
     },
     {
       "src": "/(.*)",
@@ -46,4 +48,3 @@
     "VIEW_COMPILED_PATH": "/tmp/storage/framework/views"
   }
 }
-
