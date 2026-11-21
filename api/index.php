@@ -39,5 +39,13 @@ foreach ($cacheOverrides as $key => $value) {
     }
 }
 
+// Normalize SCRIPT_NAME, PHP_SELF, and REQUEST_URI so Laravel/Symfony handles routing from root
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+$_SERVER['PHP_SELF'] = '/index.php';
+
+if (isset($_SERVER['REQUEST_URI']) && str_starts_with($_SERVER['REQUEST_URI'], '/api/index.php')) {
+    $_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], strlen('/api/index.php')) ?: '/';
+}
+
 require __DIR__ . '/../public/index.php';
 
